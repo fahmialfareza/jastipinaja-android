@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">Jastipin Aja</string>
+    <string name="logo">logo</string>
+    <string name="email">Email</string>
+    <string name="email_address">Alamat Email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Lupa Kata Sandi?</string>
+    <string name="register_here">Belum Punya Akun? Daftar Disini</string>
+    <string name="registration">Pendaftaran</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="phone_number">Nomor Telepon</string>
+    <string name="repeat_password">Ulangi Kata Sandi</string>
+    <string name="register">Daftar</string>
+    <string name="return_to_login">Kembali ke Login</string>
+    <string name="front_desc">Selamat Datang di JastipinAja!\nTitip Menitip Lebih Mudah Bersama Kami</string>
+    <string name="lets_start">Yuk Mulai!</string>
+    <string name="skip">Lewati</string>
+    <string name="skip_and_shop">Lewati dan Langsung Belanja</string>
+    <string name="back">Kembali</string>
+    <string name="logout">Keluar</string>
+    <string name="version">Version 1.0.0-SNAPSHOT</string>
 </resources>
