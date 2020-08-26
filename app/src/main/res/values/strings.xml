@@ -20,4 +20,19 @@
     <string name="back">Kembali</string>
     <string name="logout">Keluar</string>
     <string name="version">Version 1.0.0-SNAPSHOT</string>
+    <string name="label_detail_barang">Detail Barang</string>
+    <string name="label_unggah_gambar">Unggah Gambar</string>
+    <string name="label_foto_gambar">Foto Gambar</string>
+    <string name="label_nama_barang">Nama barang</string>
+    <string name="label_deskripsi_barang">Deskripsi Barang</string>
+    <string name="label_jumlah">Jumlah</string>
+    <string name="label_harga_barang">Request Harga Barang (Rp)</string>
+    <string name="label_keterangan_barang">Keterangan Barang</string>
+    <string name="label_lokasi">Detail Lokasi</string>
+    <string name="label_deadline_barang">Tanggal Berakhir</string>
+    <string name="label_post">post</string>
+    <string name="page_post_jastip">Post Barang</string>
+    <string name="page_post_request_barang">Post Permintaan Barang</string>
+    <string name="label_chat">Chat</string>
+    <string name="label_beli_sekarang">Beli Sekarang</string>
 </resources>
