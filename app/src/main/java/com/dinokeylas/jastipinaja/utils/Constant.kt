@@ -8,6 +8,7 @@ interface Constant {
             val TRANSACTION = "transaction"
             val ITEM = "item"
             val BANNER_IMAGES = "bannerImages"
+            val CITY = "city"
         }
     }
 
