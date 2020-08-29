@@ -12,4 +12,17 @@ interface Constant {
         }
     }
 
+    interface PostType{
+        companion object{
+            val POST_PRODUCT = 0
+            val REQUEST_PRODUCT = 1
+        }
+    }
+
+    interface ProductCategory{
+        companion object{
+            val GENERAL = 0
+        }
+    }
+
 }
