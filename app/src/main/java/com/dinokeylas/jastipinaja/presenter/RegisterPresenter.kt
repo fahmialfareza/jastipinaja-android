@@ -3,6 +3,7 @@ package com.dinokeylas.jastipinaja.presenter
 import com.dinokeylas.jastipinaja.contract.RegisterContract
 import com.dinokeylas.jastipinaja.model.User
 import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.USER
+import com.dinokeylas.jastipinaja.utils.EmailUtils
 import com.dinokeylas.jastipinaja.utils.MD5
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -36,6 +37,7 @@ class RegisterPresenter (_view: RegisterContract.View): RegisterContract.Present
 
         fireStore.collection(USER).document(userID ?: "default").set(createNewUser(user))
             .addOnSuccessListener {
+                EmailUtils.sendRegisterConfirmationEmail(user.email, user.fullName)
                 onRegisterSuccess()
             }.addOnFailureListener {
                 onRegisterFailure()
