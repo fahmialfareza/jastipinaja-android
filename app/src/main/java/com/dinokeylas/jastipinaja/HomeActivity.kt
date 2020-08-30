@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
 
@@ -13,6 +14,7 @@ class HomeActivity : AppCompatActivity() {
     private val fragmentFavorite = FavoriteFragment()
     private val fragmentTransaction = TransactionFragment()
     private val fragmentProfile = ProfileFragment()
+    private val fragmentPostOption = PostOptionFragment()
     private var active: Fragment = fragmentHome
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +32,12 @@ class HomeActivity : AppCompatActivity() {
             false
         }
 
+        fab?.setOnClickListener {
+            showFragment(fragmentPostOption)
+            active = fragmentPostOption
+        }
+
+        supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentPostOption).hide(fragmentPostOption).commit()
         supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentProfile).hide(fragmentProfile).commit()
         supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentTransaction).hide(fragmentTransaction).commit()
         supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentFavorite).hide(fragmentFavorite).commit()
