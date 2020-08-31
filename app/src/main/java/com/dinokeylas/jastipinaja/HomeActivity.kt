@@ -14,7 +14,7 @@ class HomeActivity : AppCompatActivity() {
     private val fragmentFavorite = FavoriteFragment()
     private val fragmentTransaction = TransactionFragment()
     private val fragmentProfile = ProfileFragment()
-    private val fragmentPost = PostChoiceFragment()
+    private val fragmentPostOption = PostOptionFragment()
     private var active: Fragment = fragmentHome
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,16 +32,16 @@ class HomeActivity : AppCompatActivity() {
             false
         }
 
+        fab_post.setOnClickListener {
+            showFragment(fragmentPostOption)
+            active = fragmentPostOption
+        }
+
+        supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentPostOption).hide(fragmentPostOption).commit()
         supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentProfile).hide(fragmentProfile).commit()
         supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentTransaction).hide(fragmentTransaction).commit()
-        supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentPost).hide(fragmentPost).commit()
         supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentFavorite).hide(fragmentFavorite).commit()
         supportFragmentManager.beginTransaction().add(R.id.frame_container, fragmentHome).commit()
-
-        fab_post.setOnClickListener {
-            showFragment(fragmentPost)
-            active = fragmentPost
-        }
     }
 
     private fun selectedMenu(menuItem: MenuItem) {

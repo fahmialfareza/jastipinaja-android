@@ -54,6 +54,7 @@
     <string name="page_post_request_barang">Post Permintaan Barang</string>
     <string name="label_chat">Chat</string>
     <string name="label_beli_sekarang">Beli Sekarang</string>
+
     <string name="address">Alamat</string>
     <string name="close">Keluar</string>
     <string name="username">Nama User</string>
@@ -79,4 +80,12 @@
     <string name="account_name">Nama Akun</string>
     <string name="save">Simpan</string>
     <string name="cancel">Batal</string>
+
+    <string name="label_title_posting">Apa yang ingin kamu posting?</string>
+    <string name="label_post_barang">Post Barang</string>
+    <string name="label_request_barang">Request Barang</string>
+    <string name="label_kategori">Kategori</string>
+    <string name="label_deskripsi_produk">Deskripsi Produk</string>
+    <string name="label_total_transaksi">Total Transaksi</string>
+    <string name="label_progress">Progress</string>
 </resources>
