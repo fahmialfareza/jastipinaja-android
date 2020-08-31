@@ -1,48 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ProfileFragment"
-    android:paddingTop="20dp"
-    android:paddingBottom="70dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="70dp"
+    tools:context=".PostOptionFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:layout_alignParentBottom="true">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:text="@string/label_title_posting"
+            android:id="@+id/tv_choice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="20sp"
+            android:text="@string/choice"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_post_jastip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:drawableStart="@drawable/ic_arrow_upward_grey_24dp"
+            android:drawablePadding="16sp"
+            android:text="@string/post_jastip"
+            android:fontFamily="@font/roboto_regular"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            app:layout_constraintTop_toBottomOf="@id/tv_choice"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
-            android:id="@+id/btnPostBarang"
+            android:id="@+id/tv_request_jastip"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center_vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:text="@string/label_post_barang"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:drawableStart="@drawable/ic_arrow_downward_grey_24dp"
+            android:drawablePadding="16dp"
+            android:text="@string/request_jastip"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_post_jastip"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-            android:id="@+id/btnRequestBarang"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center_vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:text="@string/label_request_barang"
-            android:textSize="16sp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
 </RelativeLayout>
