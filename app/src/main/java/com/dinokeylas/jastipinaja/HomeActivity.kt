@@ -32,7 +32,7 @@ class HomeActivity : AppCompatActivity() {
             false
         }
 
-        fab?.setOnClickListener {
+        fab_post.setOnClickListener {
             showFragment(fragmentPostOption)
             active = fragmentPostOption
         }

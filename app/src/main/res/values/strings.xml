@@ -54,6 +54,33 @@
     <string name="page_post_request_barang">Post Permintaan Barang</string>
     <string name="label_chat">Chat</string>
     <string name="label_beli_sekarang">Beli Sekarang</string>
+
+    <string name="address">Alamat</string>
+    <string name="close">Keluar</string>
+    <string name="username">Nama User</string>
+    <string name="edit_profile">Edit Profil</string>
+    <string name="account">Akun</string>
+    <string name="activity">Aktivitas</string>
+    <string name="sold">Terjual</string>
+    <string name="purchased">Terbeli</string>
+    <string name="nol">0</string>
+    <string name="action">Aksi</string>
+    <string name="my_post">Post Saya</string>
+    <string name="live_shop">Live Shop</string>
+    <string name="choice">Pilihan</string>
+    <string name="post_jastip">Post Jastip</string>
+    <string name="request_jastip">Tolong Belikan</string>
+    <string name="notification">Notifikasi</string>
+    <string name="transaction_date">Tanggal Transaksi</string>
+    <string name="transaction_type">Jenis Transaksi</string>
+    <string name="transaction_progress">Progress Transaksi</string>
+    <string name="message_preview">Cuplikan Pesan</string>
+    <string name="example_date">12:00</string>
+    <string name="setting">setting</string>
+    <string name="account_name">Nama Akun</string>
+    <string name="save">Simpan</string>
+    <string name="cancel">Batal</string>
+
     <string name="label_title_posting">Apa yang ingin kamu posting?</string>
     <string name="label_post_barang">Post Barang</string>
     <string name="label_request_barang">Request Barang</string>

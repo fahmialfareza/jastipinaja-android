@@ -20,7 +20,7 @@ class PostOptionFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        btnPostBarang?.setOnClickListener {
+        tv_post_jastip?.setOnClickListener {
             startActivity(
                 Intent(
                     context,
@@ -28,7 +28,7 @@ class PostOptionFragment : Fragment() {
                 ).putExtra(PostingActivity.FLAG, 1)
             )
         }
-        btnRequestBarang?.setOnClickListener {
+        tv_request_jastip?.setOnClickListener {
             startActivity(
                 Intent(
                     context,
