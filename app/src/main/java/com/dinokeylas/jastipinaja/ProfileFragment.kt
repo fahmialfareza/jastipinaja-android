@@ -29,7 +29,7 @@ class ProfileFragment : Fragment(), ProfileContract.View {
         view.btn_logout.setOnClickListener { profilePresenter.logout() }
 
         view.iv_edit_profile.setOnClickListener {
-            startActivity(Intent(context, HomeActivity::class.java))
+            startActivity(Intent(context, EditProfileActivity::class.java))
         }
 
         return view
