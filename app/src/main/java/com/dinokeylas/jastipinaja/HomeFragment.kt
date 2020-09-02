@@ -31,7 +31,9 @@ class HomeFragment : Fragment() {
     private var NUM_PAGES = 0
     private var imageList: ArrayList<BannerImage> = ArrayList()
     private var cityList: ArrayList<City> = ArrayList()
-    private var postList: ArrayList<Post> = ArrayList()
+    private var postListAll: ArrayList<Post> = ArrayList()
+    private var postJastipList: ArrayList<Post> = ArrayList()
+    private var postRequestList: ArrayList<Post> = ArrayList()
     private lateinit var ctx: View
     private lateinit var indicator: CirclePageIndicator
 
@@ -51,7 +53,7 @@ class HomeFragment : Fragment() {
         return view
     }
 
-    private fun showCityList(){
+    private fun showCityList() {
         FirebaseFirestore.getInstance().collection(CITY).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
@@ -62,10 +64,11 @@ class HomeFragment : Fragment() {
             }.addOnFailureListener { Log.e("FETCH-CITY", it.message) }
     }
 
-    private fun fillCityToLayout(){
+    private fun fillCityToLayout() {
         val recyclerView: RecyclerView = ctx.findViewById(R.id.rv_city)
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         val adapter = CityAdapter(context!!, cityList)
         recyclerView.adapter = adapter
@@ -82,7 +85,7 @@ class HomeFragment : Fragment() {
             }.addOnFailureListener { Log.e("FETCH-BANNER-IMAGE", it.message) }
     }
 
-    private fun fillBannerToLayout(){
+    private fun fillBannerToLayout() {
         viewPager?.adapter = SliderImageAdapter(ctx.context, imageList)
         setIndicator()
     }
@@ -96,7 +99,9 @@ class HomeFragment : Fragment() {
         // Auto start of viewpager
         val handler = Handler()
         val update = Runnable {
-            if (currentPage == NUM_PAGES) { currentPage = 0 }
+            if (currentPage == NUM_PAGES) {
+                currentPage = 0
+            }
             viewPager!!.setCurrentItem(currentPage++, true)
         }
 
@@ -109,30 +114,56 @@ class HomeFragment : Fragment() {
 
         // Pager listener over indicator
         indicator.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageSelected(position: Int) { currentPage = position }
-            override fun onPageScrolled(pos: Int, arg1: Float, arg2: Int) { }
-            override fun onPageScrollStateChanged(pos: Int) { }
+            override fun onPageSelected(position: Int) {
+                currentPage = position
+            }
+
+            override fun onPageScrolled(pos: Int, arg1: Float, arg2: Int) {}
+            override fun onPageScrollStateChanged(pos: Int) {}
         })
     }
 
-    private fun showJastip(){
+    private fun showJastip() {
         FirebaseFirestore.getInstance().collection(POST).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     val post: Post = document.toObject(Post::class.java)
                     post.postId = document.id
-                    postList.add(post)
+                    postListAll.add(post)
                 }
-                fillPostToLayout()
+                filterPost()
+                fillPostJastipToLayout()
+                fillPostRequestToLayout()
             }.addOnFailureListener { Log.e("FETCH-POST", it.message) }
     }
 
-    private fun fillPostToLayout(){
+    private fun fillPostJastipToLayout() {
         val recyclerView: RecyclerView = ctx.findViewById(R.id.rv_jastip_product)
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        val adapter = PostAdapter(context!!, postList)
+        val adapter = PostAdapter(context!!, postJastipList)
         recyclerView.adapter = adapter
+    }
+
+    private fun fillPostRequestToLayout() {
+        val recyclerView: RecyclerView = ctx.findViewById(R.id.rv_top_request)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        val adapter = PostAdapter(context!!, postRequestList)
+        recyclerView.adapter = adapter
+    }
+
+    private fun filterPost() {
+        for (post in postListAll) {
+            if (post.postType == 1) {
+                postJastipList.add(post)
+            } else {
+                postRequestList.add(post)
+            }
+        }
     }
 }

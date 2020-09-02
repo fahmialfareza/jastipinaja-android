@@ -7,7 +7,7 @@ class DateUtils {
     companion object {
         @JvmStatic
         fun getStringFormatedDate(date: Date): String{
-            return SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(date)
+            return SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(date)
         }
     }
 }
