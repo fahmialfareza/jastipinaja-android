@@ -41,7 +41,7 @@ class PostAdapter(
         holder.tvName.text = postList[position].product.name
         holder.tvDate.text = date
         holder.tvPrice.text = price
-        holder.tvLocation.text = postList[position].product.locationFull
+        holder.tvLocation.text = postList[position].product.locationCity
         Glide.with(context).load(postList[position].product.imageUrl).into(holder.ivProduct)
         holder.cardView.setOnClickListener(onClickListener(position))
     }
