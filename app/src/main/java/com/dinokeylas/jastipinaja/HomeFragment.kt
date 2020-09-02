@@ -11,11 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.dinokeylas.jastipinaja.adapter.CityAdapter
+import com.dinokeylas.jastipinaja.adapter.PostAdapter
 import com.dinokeylas.jastipinaja.adapter.SliderImageAdapter
 import com.dinokeylas.jastipinaja.model.BannerImage
 import com.dinokeylas.jastipinaja.model.City
+import com.dinokeylas.jastipinaja.model.Post
 import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.BANNER_IMAGES
 import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.CITY
+import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.POST
 import com.google.firebase.firestore.FirebaseFirestore
 import com.viewpagerindicator.CirclePageIndicator
 import java.util.*
@@ -28,6 +31,7 @@ class HomeFragment : Fragment() {
     private var NUM_PAGES = 0
     private var imageList: ArrayList<BannerImage> = ArrayList()
     private var cityList: ArrayList<City> = ArrayList()
+    private var postList: ArrayList<Post> = ArrayList()
     private lateinit var ctx: View
     private lateinit var indicator: CirclePageIndicator
 
@@ -42,6 +46,7 @@ class HomeFragment : Fragment() {
 
         showSliderImage()
         showCityList()
+        showJastip()
 
         return view
     }
@@ -108,5 +113,26 @@ class HomeFragment : Fragment() {
             override fun onPageScrolled(pos: Int, arg1: Float, arg2: Int) { }
             override fun onPageScrollStateChanged(pos: Int) { }
         })
+    }
+
+    private fun showJastip(){
+        FirebaseFirestore.getInstance().collection(POST).get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val post: Post = document.toObject(Post::class.java)
+                    post.postId = document.id
+                    postList.add(post)
+                }
+                fillPostToLayout()
+            }.addOnFailureListener { Log.e("FETCH-POST", it.message) }
+    }
+
+    private fun fillPostToLayout(){
+        val recyclerView: RecyclerView = ctx.findViewById(R.id.rv_jastip_product)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        val adapter = PostAdapter(context!!, postList)
+        recyclerView.adapter = adapter
     }
 }
