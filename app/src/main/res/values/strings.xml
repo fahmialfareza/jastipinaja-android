@@ -88,4 +88,34 @@
     <string name="label_deskripsi_produk">Deskripsi Produk</string>
     <string name="label_total_transaksi">Total Transaksi</string>
     <string name="label_progress">Progress</string>
+    <string name="label_jasa_jastip">Jasa Jastip (Rp)</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="product_price">Harga Barang (Rp)</string>
+
+    <string-array name="category">
+        <item>Fashion dan Aksesoris</item>
+        <item>Produk Kecantikan</item>
+        <item>Olahraga</item>
+        <item>Peralatan Rumah Tangga</item>
+        <item>Ibu dan Anak</item>
+    </string-array>
+
+    <string-array name="province">
+        <item>Jakarta</item>
+        <item>Jawa Timur</item>
+        <item>Jawa Barat</item>
+        <item>Jawa Tengah</item>
+        <item>Yogyakarta</item>
+    </string-array>
+
+    <string-array name="city">
+        <item>Jakarta</item>
+        <item>Bandung</item>
+        <item>Surabaya</item>
+        <item>Malang</item>
+        <item>Semarang</item>
+        <item>Mataram</item>
+        <item>Bogor</item>
+    </string-array>
 </resources>

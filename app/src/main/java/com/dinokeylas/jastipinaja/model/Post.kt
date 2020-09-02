@@ -7,7 +7,7 @@ data class Post (
     @get:Exclude var postId: String = "",
     val product: Product = Product(),
     val title: String = "",
-    val author: User = User(),
+    val author: String = "",
     val postType: Int = 0,
     val isLive: Boolean = false,
     val createAt: Date = Calendar.getInstance().time,
