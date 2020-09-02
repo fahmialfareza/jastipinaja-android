@@ -4,23 +4,29 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toFile
 import com.bumptech.glide.Glide
 import com.dinokeylas.jastipinaja.model.User
 import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.USER
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.okhttp.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import java.io.IOException
+
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -64,7 +70,11 @@ class EditProfileActivity : AppCompatActivity() {
                 CHOOSE_IMAGE
             )
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 0)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                0
+            )
         }
     }
 
@@ -107,7 +117,8 @@ class EditProfileActivity : AppCompatActivity() {
                 Toast.makeText(this, "Data Berhasil Diperbarui", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, HomeActivity::class.java))
             }.addOnFailureListener {
-                Toast.makeText(this, "Pastikan Anda Terkoneksi dengan Internet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Pastikan Anda Terkoneksi dengan Internet", Toast.LENGTH_SHORT)
+                    .show()
             }
     }
 
@@ -134,12 +145,13 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun deleteOldImage(oldProfileImgUrl: String){
-        if(oldProfileImgUrl != "default profile image url"){
-            FirebaseStorage.getInstance().getReferenceFromUrl(oldProfileImgUrl).delete().addOnSuccessListener {
-                progress_bar.visibility = View.GONE
-                oldProfileImageUrl = profileImageUrl
-            }
+    private fun deleteOldImage(oldProfileImgUrl: String) {
+        if (oldProfileImgUrl != "default profile image url") {
+            FirebaseStorage.getInstance().getReferenceFromUrl(oldProfileImgUrl).delete()
+                .addOnSuccessListener {
+                    progress_bar.visibility = View.GONE
+                    oldProfileImageUrl = profileImageUrl
+                }
         } else {
             progress_bar.visibility = View.GONE
             oldProfileImageUrl = profileImageUrl
@@ -154,57 +166,146 @@ class EditProfileActivity : AppCompatActivity() {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uriProfileImage)
                 civ_profile_image.setImageBitmap(bitmap)
                 uploadImage(uriProfileImage)
+//                uploadToObjectStorage(uriProfileImage)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
     }
 
-//    fun uploadImageToBigBoxAPI(){
-//        AsyncTask.execute {
-//            val client = OkHttpClient()
-//
-//            val body: RequestBody = FormEncodingBuilder()
-//                .add("subject", "Selamat Datang di JastipinAja")
-//                .add(
-//                    "message",
-//                    "Halo " + username +"!\n" +
-//                            "Terima kasih telah mendaftar dan menjadi bagian dari JastipinAja\n" +
-//                            "Selamat datang di JastipinAja, aplikasi titip barang apapun dimana aja!\n\n" +
-//                            "Salam,\n" +
-//                            "Tim JastipinAja :)"
-//                )
-//                .add("recipient", email)
-//                .build()
-//
-//            val request: Request = Request.Builder()
-//                .url("https://api.thebigbox.id/mail-sender/0.0.1/mails")
-//                .method("POST", body)
-//                .addHeader("x-api-key", "3lr7BsqF0N6RqWTffs9D6d3d7JqiGekT")
-//                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-//                .build()
-//
-//            client.newCall(request).execute()
+    fun uploadToObjectStorage(imageUri: Uri?) {
+        val file = imageUri?.toFile()
+        val fileName = getFileName(imageUri!!)
+
+        AsyncTask.execute {
+            val client = OkHttpClient()
+
+            val body: RequestBody = MultipartBuilder()
+                .addFormDataPart(
+                    "file", fileName,
+                    RequestBody.create(MediaType.parse("application/octet-stream"), file)
+                )
+                .build()
+            val request: Request = Request.Builder()
+                .url("https://api.thebigbox.id/object-storage/0.0.2/stores/jastipinaja")
+                .method("POST", body)
+                .addHeader("x-api-key", "3lr7BsqF0N6RqWTffs9D6d3d7JqiGekT")
+                .addHeader("Content-Type", "multipart/form-data")
+                .addHeader("accept", "application/json")
+                .build()
+
+            val response: Response = client.newCall(request).execute()
+
+            if (response.isSuccessful) {
+                Log.d("File upload","success, file name: $fileName")
+                Toast.makeText(this, "Upload Gambar Berhasil", Toast.LENGTH_SHORT).show()
+            } else {
+                Log.e("File upload", "failed")
+                Toast.makeText(this, "Upload Gambar Gagal", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun getFileName(uri: Uri): String? {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                cursor?.close()
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result.lastIndexOf('/')
+            if (cut != -1) {
+                result = result.substring(cut + 1)
+            }
+        }
+        return result
+    }
+
+//    private fun getRealPathFromURI(contentURI: Uri): String? {
+//        val result: String
+//        val cursor =
+//            contentResolver.query(contentURI, null, null, null, null)
+//        if (cursor == null) { // Source is Dropbox or other similar local file path
+//            result = contentURI.path
+//        } else {
+//            cursor.moveToFirst()
+//            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+//            result = cursor.getString(idx)
+//            cursor.close()
 //        }
+//        return result
 //    }
 //
-//    fun a(){
-//        val client: OkHttpClient = OkHttpClient()
-////        var mediaType: MediaType = MediaType.parse("text/plain")
 //
-//        var body: RequestBody = RequestBody.create()
+//    private fun uriToFilename(uri: Uri): String? {
+//        var path: String? = null
+//        path = if (Build.VERSION.SDK_INT < 19 && Build.VERSION.SDK_INT > 11) {
+//            getRealPathFromURI_API11to18(this, uri)
+//        } else {
+//            getFilePath(this, uri)
+//        }
+//        return path
+//    }
 //
-////            .add("file", "/C:/Users/Fahmi Alfareza/Downloads/Dino_Keylas.jpg",  // Ini file yang diupload
-////                RequestBody.create(MediaType.parse("application/octet-stream"),
-////                    File("/C:/Users/Fahmi Alfareza/Downloads/Dino_Keylas.jpg")
-////                )) // Ini file yang diupload
-////            .build()
-//        var request: Request = Builder()
-//            .url("https://api.thebigbox.id/object-storage/0.0.2/stores/jastipinaja") // Bucket jastipinaja udah ada tinggal dipake aja
-//            .method("POST", body)
-//            .addHeader("x-api-key", "3lr7BsqF0N6RqWTffs9D6d3d7JqiGekT")
-//            .build()
-//        var response: Response<*> = client.newCall(request).execute()
+//    fun getRealPathFromURI_API11to18(
+//        context: Context?,
+//        contentUri: Uri?
+//    ): String? {
+//        val proj = arrayOf(MediaStore.Images.Media.DATA)
+//        var result: String? = null
+//        val cursorLoader = CursorLoader(
+//            context!!,
+//            contentUri!!, proj, null, null, null
+//        )
+//        val cursor: Cursor = cursorLoader.loadInBackground()!!
+//        if (cursor != null) {
+//            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//            cursor.moveToFirst()
+//            result = cursor.getString(column_index)
+//        }
+//        return result
+//    }
+//
+//    fun getFilePath(context: Context, uri: Uri): String? {
+//        //Log.e("uri", uri.getPath());
+//        var filePath: String? = ""
+//        if (DocumentsContract.isDocumentUri(context, uri)) {
+//            val wholeID: String = DocumentsContract.getDocumentId(uri)
+//            //Log.e("wholeID", wholeID);
+//            // Split at colon, use second item in the array
+//            val splits = wholeID.split(":").toTypedArray()
+//            if (splits.size == 2) {
+//                val id = splits[1]
+//                val column =
+//                    arrayOf(MediaStore.Images.Media.DATA)
+//                // where id is equal to
+//                val sel = MediaStore.Images.Media._ID + "=?"
+//                val cursor: Cursor = context.contentResolver.query(
+//                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                    column, sel, arrayOf(id), null
+//                )
+//                val columnIndex = cursor.getColumnIndex(column[0])
+//                if (cursor.moveToFirst()) {
+//                    filePath = cursor.getString(columnIndex)
+//                }
+//                cursor.close()
+//            }
+//        } else {
+//            filePath = uri.path
+//        }
+//        return filePath
 //    }
 
+
+//    Log.e("ERRRRROOOOORR", file?.path)
+//    Log.e("ERRRRROOOOORR", fileName)
+//    Log.e("ERRRRROOOOORR-Uri", imageUri.toString())
+//    Log.e("ERRRRROOOOORR-path", imageUri.path)
 }

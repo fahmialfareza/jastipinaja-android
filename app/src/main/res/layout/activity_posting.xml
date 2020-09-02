@@ -42,15 +42,29 @@
                 android:text="@string/label_detail_barang"
                 android:textSize="15sp" />
 
-            <ImageView
-                android:id="@+id/ivBarang"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/bg_rounded_border_black"
-                android:contentDescription="@string/label_unggah_gambar"
-                android:src="@drawable/jastipin_logo" />
+                android:layout_height="200dp">
+
+                <ImageView
+                    android:id="@+id/ivBarang"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_rounded_border_black"
+                    android:contentDescription="@string/label_unggah_gambar"
+                    android:src="@drawable/jastipin_logo" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -64,6 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/label_nama_barang"
+                    android:inputType="text"
                     android:textSize="12sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,7 +89,7 @@
                 android:background="@drawable/bg_rounded_border_black">
 
                 <Spinner
-                    android:id="@+id/categorySpinner"
+                    android:id="@+id/spinnerCategory"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
@@ -144,23 +159,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="-"
+                            android:text="@string/minus"
                             android:textColor="@android:color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/stockEdt"
+                    <TextView
+                        android:id="@+id/tvQty"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:background="@drawable/bg_rounded_border_grey"
                         android:gravity="center"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
+                        android:text="@string/nol"
                         android:maxLength="4"
-                        android:textSize="12sp"
-                        tools:ignore="Autofill,LabelFor" />
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:id="@+id/plusLyt"
@@ -175,7 +188,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="+"
+                            android:text="@string/plus"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -194,7 +207,24 @@
                     android:id="@+id/etHargaBarang"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/label_harga_barang"
+                    android:hint="@string/product_price"
+                    android:inputType="number"
+                    android:textSize="12sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_harga_jastip"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:boxStrokeColor="#e6e6e6">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etHargaJastip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/label_jasa_jastip"
                     android:inputType="number"
                     android:textSize="12sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -211,7 +241,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="true"
-                    android:hint="@string/label_deadline_barang"
                     android:inputType="number"
                     android:textSize="12sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -231,7 +260,7 @@
                 android:background="@drawable/bg_rounded_border_black">
 
                 <Spinner
-                    android:id="@+id/provinceSpinner"
+                    android:id="@+id/spinnerProvince"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
@@ -256,7 +285,7 @@
                 android:background="@drawable/bg_rounded_border_black">
 
                 <Spinner
-                    android:id="@+id/citySpinner"
+                    android:id="@+id/spinnerCity"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
