@@ -1,6 +1,7 @@
 package com.dinokeylas.jastipinaja.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.dinokeylas.jastipinaja.DetailProductActivity
 import com.dinokeylas.jastipinaja.R
 import com.dinokeylas.jastipinaja.model.Post
 import com.dinokeylas.jastipinaja.utils.DateUtils
@@ -31,9 +33,9 @@ class PostAdapter(
     override fun getItemCount(): Int = postList.size
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val date: String = if(postList[position].postType==1){
+        val date: String = if (postList[position].postType == 1) {
             DateUtils.getStringFormatedDate(postList[position].product.shoppingDate)
-        } else{
+        } else {
             DateUtils.getStringFormatedDate(postList[position].product.ExpiredDate)
         }
         val price = "Rp " + postList[position].product.price.toString()
@@ -63,9 +65,11 @@ class PostAdapter(
         }
     }
 
-    private fun moveToTransactionDetail(post: Post){
-        Toast.makeText(context, post.product.name, Toast.LENGTH_SHORT).show()
-        TODO("Intent Here")
+    private fun moveToTransactionDetail(post: Post) {
+        context.startActivity(
+            Intent(context, DetailProductActivity::class.java).putExtra(
+                DetailProductActivity.POST_ID, post.postId
+            )
+        )
     }
-
 }

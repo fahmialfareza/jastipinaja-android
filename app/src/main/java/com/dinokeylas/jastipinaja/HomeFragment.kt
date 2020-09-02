@@ -1,5 +1,6 @@
 package com.dinokeylas.jastipinaja
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -21,6 +22,8 @@ import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.CITY
 import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.POST
 import com.google.firebase.firestore.FirebaseFirestore
 import com.viewpagerindicator.CirclePageIndicator
+import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -49,6 +52,23 @@ class HomeFragment : Fragment() {
         showSliderImage()
         showCityList()
         showJastip()
+
+        view.tv_jastip_product_all.setOnClickListener {
+            startActivity(
+                Intent(
+                    context,
+                    PostAllActivity::class.java
+                ).putExtra(PostAllActivity.FLAG, 1)
+            )
+        }
+        view.tv_top_request_all.setOnClickListener {
+            startActivity(
+                Intent(
+                    context,
+                    PostAllActivity::class.java
+                ).putExtra(PostAllActivity.FLAG, 2)
+            )
+        }
 
         return view
     }

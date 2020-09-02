@@ -52,8 +52,11 @@
     <string name="label_post">post</string>
     <string name="page_post_jastip">Post Barang</string>
     <string name="page_post_request_barang">Post Permintaan Barang</string>
+    <string name="page_post_jastip_all">Semua Barang</string>
+    <string name="page_post_request_barang_all">Permintaan Terbanyak</string>
     <string name="label_chat">Chat</string>
     <string name="label_beli_sekarang">Beli Sekarang</string>
+    <string name="label_bantu_belikan">Bantu Belikan</string>
 
     <string name="address">Alamat</string>
     <string name="close">Keluar</string>
