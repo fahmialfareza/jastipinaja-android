@@ -1,9 +1,11 @@
 package com.dinokeylas.jastipinaja
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.dinokeylas.jastipinaja.model.Post
 import com.dinokeylas.jastipinaja.model.User
@@ -63,10 +65,18 @@ class DetailProductActivity : AppCompatActivity() {
     }
 
     private fun eventUI() {
-        if(post.postType == 1){
-
-        } else {
-
+//        if(post.postType == 1){
+//
+//        } else {
+//
+//        }
+        btnBeli.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    ProductBuyActivity::class.java
+                ).putExtra(ProductBuyActivity.POST_ID, post.postId)
+            )
         }
     }
 
@@ -74,8 +84,9 @@ class DetailProductActivity : AppCompatActivity() {
     private fun initPostData() {
         FirebaseFirestore.getInstance().collection(POST).document(postId).get()
             .addOnSuccessListener {
-                if(it!=null){
+                if (it != null) {
                     post = it.toObject(Post::class.java)!!
+                    post.postId = it.id
                     initPersonData()
                 } else {
                     Log.d("DETAIL-POST", "No Post data")
@@ -86,10 +97,10 @@ class DetailProductActivity : AppCompatActivity() {
     }
 
     //get data from Firebase
-    private fun initPersonData(){
+    private fun initPersonData() {
         FirebaseFirestore.getInstance().collection(USER).document(post.author).get()
             .addOnSuccessListener {
-                if(it!=null){
+                if (it != null) {
                     person = it.toObject(User::class.java)!!
                     initUI()
                 } else {

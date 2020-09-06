@@ -207,9 +207,7 @@ class PostingActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         }
     }
 
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        TODO("Not yet implemented")
-    }
+    override fun onNothingSelected(p0: AdapterView<*>?) { }
 
     private fun showDatePickerDialog() {
         val newCalendar = Calendar.getInstance()
@@ -313,7 +311,7 @@ class PostingActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         builder.setTitle("Informasi")
         builder.setMessage("Yey! Posting berhasil!")
         builder.setPositiveButton("Oke") { _, _ ->
-            finish()
+            startActivity(Intent(this, HomeActivity::class.java))
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()

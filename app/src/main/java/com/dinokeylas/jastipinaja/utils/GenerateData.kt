@@ -12,10 +12,10 @@ class GenerateData {
             var t1 = TransactionExample(
                 "0",
                 "0",
-                "dasd",
-                "dinok@gmail.com",
+                "Doni Purwansyah",
+                "doni@gmail.com",
                 Calendar.getInstance().time,
-                "Baju Baru",
+                "Baju Uniqlo",
                 120000,
                 "httpImage",
                 "Malang",
@@ -23,15 +23,15 @@ class GenerateData {
                 120000,
                 "Arif",
                 false,
-                "onProgress"
+                "Sedang Dikirim"
             )
             var t2 = TransactionExample(
                 "0",
                 "0",
-                "dasd",
+                "Dino Keylas",
                 "dinok@gmail.com",
                 Calendar.getInstance().time,
-                "Baju Baru 2",
+                "Baju 3Second",
                 120000,
                 "httpImage",
                 "Malang",
@@ -39,7 +39,7 @@ class GenerateData {
                 120000,
                 "Arif",
                 false,
-                "onProgress"
+                "Belum Dibeli"
             )
             tranList.add(t1)
             tranList.add(t2)
@@ -51,11 +51,11 @@ class GenerateData {
         fun generateMessageList(): ArrayList<MessageExample>{
             var messageList = ArrayList<MessageExample>()
 
-            val m1 = MessageExample("a","https://firebasestorage.googleapis.com/v0/b/jastipin-aja.appspot.com/o/Cities%2Fbogor.jpg?alt=media&token=0c35985c-2329-465e-9540-f657bddcf6e6",
-                "dino", "this is message", Calendar.getInstance().time, 0)
+//            val m1 = MessageExample("a","https://firebasestorage.googleapis.com/v0/b/jastipin-aja.appspot.com/o/Cities%2Fbogor.jpg?alt=media&token=0c35985c-2329-465e-9540-f657bddcf6e6",
+//                "dino", "this is message", Calendar.getInstance().time, 0)
             val m2 = MessageExample("a", "https://firebasestorage.googleapis.com/v0/b/jastipin-aja.appspot.com/o/Cities%2Fbogor.jpg?alt=media&token=0c35985c-2329-465e-9540-f657bddcf6e6",
                 "doni", "this is message 2", Calendar.getInstance().time, 2)
-            messageList.add(m1)
+//            messageList.add(m1)
             messageList.add(m2)
             return messageList
         }

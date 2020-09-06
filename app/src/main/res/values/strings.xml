@@ -95,6 +95,8 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="product_price">Harga Barang (Rp)</string>
+    <string name="label_alamat_kirim">Alamat Kirim</string>
+    <string name="next_to_pay">Lanjutkan Ke Pembayaran</string>
 
     <string-array name="category">
         <item>Fashion dan Aksesoris</item>
@@ -120,5 +122,13 @@
         <item>Semarang</item>
         <item>Mataram</item>
         <item>Bogor</item>
+    </string-array>
+
+    <string-array name="expedition">
+        <item>JNE</item>
+        <item>JNT</item>
+        <item>Antareja</item>
+        <item>Sicepat</item>
+        <item>Go-Send</item>
     </string-array>
 </resources>

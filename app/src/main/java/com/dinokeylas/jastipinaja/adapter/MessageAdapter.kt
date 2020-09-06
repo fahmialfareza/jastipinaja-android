@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dinokeylas.jastipinaja.R
+import com.dinokeylas.jastipinaja.utils.DateUtils
 import com.dinokeylas.jastipinaja.utils.MessageExample
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -35,7 +36,7 @@ class MessageAdapter(
         holder.layoutMessage.setOnClickListener(onClickListener(position))
         holder.tvUserName.text = messageList[position].receiver.trim()
         holder.tvMessagePreview.text = messageList[position].preview.trim()
-        holder.tvMessageDate.text = messageList[position].date.toString().trim()
+        holder.tvMessageDate.text = DateUtils.getStringFormatedDate(messageList[position].date)
         if (messageList[position].count>0){
           holder.tvUnreadMessageCount.visibility = View.VISIBLE
             holder.tvUnreadMessageCount.text = messageList[position].count.toString().trim()
