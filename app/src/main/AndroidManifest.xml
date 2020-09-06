@@ -15,10 +15,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PostAllActivity"/>
+        <activity android:name=".ProductBuyActivity"/>
+        <activity android:name=".PostAllActivity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".PostingActivity" />
         <activity android:name=".DetailProductActivity" />
+        <activity android:name=".DetailTransactionActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".FrontOptionActivity">
             <intent-filter>
