@@ -26,4 +26,20 @@ interface Constant {
         }
     }
 
+    interface TransactionStatus{
+        companion object{
+            val ON_PROGRESS = "onProgress"
+            val SUCCESS = "success"
+            val FAILED = "failed"
+        }
+    }
+
+    interface TransactionProgress{
+        companion object{
+            val ORDER = "order"
+            val PAYED = "payed"
+            val ON_THE_WAY = "onTheWay"
+            val FINISH = "finish"
+        }
+    }
 }

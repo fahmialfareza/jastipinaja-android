@@ -9,6 +9,15 @@
     android:fitsSystemWindows="true"
     tools:context=".ProductBuyActivity">
 
+    <ProgressBar
+        android:id="@+id/pb_product_buy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:elevation="10dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/colorPrimaryDark"/>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_detail_kampus"
         android:layout_width="match_parent"
@@ -209,7 +218,7 @@
                 android:layout_marginTop="15dp"
                 app:boxStrokeColor="#e6e6e6">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etKeteranganBarang"
+                    android:id="@+id/etKeteranganBarang_"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/label_keterangan_barang"
