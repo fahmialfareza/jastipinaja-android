@@ -9,6 +9,15 @@
     android:fitsSystemWindows="true"
     tools:context=".ProductBuyActivity">
 
+    <ProgressBar
+        android:id="@+id/pb_product_buy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:elevation="10dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/colorPrimaryDark"/>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_detail_kampus"
         android:layout_width="match_parent"

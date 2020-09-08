@@ -128,7 +128,9 @@
                     android:id="@+id/ivFotoJastiper"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@drawable/person_icon"
+                    app:civ_border_color="@color/colorGrey"
+                    app:civ_border_width="2dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

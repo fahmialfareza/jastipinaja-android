@@ -1,6 +1,9 @@
 package com.dinokeylas.jastipinaja
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +16,12 @@ import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.POST
 import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.USER
 import com.dinokeylas.jastipinaja.utils.DateUtils
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.Request
 import kotlinx.android.synthetic.main.activity_detail_product.*
+import kotlinx.android.synthetic.main.fragment_profile.*
+import java.io.BufferedInputStream
+import java.io.InputStream
 
 class DetailProductActivity : AppCompatActivity() {
     companion object {
@@ -23,6 +31,7 @@ class DetailProductActivity : AppCompatActivity() {
     private var postId = String()
     private var post = Post()
     private var person = User()
+    private lateinit var bitmap: Bitmap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_product)
@@ -61,7 +70,10 @@ class DetailProductActivity : AppCompatActivity() {
         tvPerson.text = person.fullName
 
         Glide.with(this).load(post.product.imageUrl).into(ivBarang)
-        Glide.with(this).load(person.profileImageUrl).into(ivFotoJastiper)
+        Glide.with(this).load(R.drawable.person_icon).into(ivFotoJastiper)
+//        if (person.profileImageUrl != "default profile image url") {
+//            loadDataFromObjectStorage(person.profileImageUrl)
+//        }
     }
 
     private fun eventUI() {
@@ -109,5 +121,37 @@ class DetailProductActivity : AppCompatActivity() {
             }.addOnFailureListener {
                 Log.e("DETAIL-POST", it.message)
             }
+    }
+
+    private fun loadDataFromObjectStorage(imageUrl: String?) {
+        AsyncTask.execute {
+            val client = OkHttpClient()
+            val request: Request = Request.Builder()
+                .url(imageUrl)
+                .get()
+                .addHeader("x-api-key", "3lr7BsqF0N6RqWTffs9D6d3d7JqiGekT")
+                .addHeader("accept", "application/json")
+                .build()
+
+            try {
+                val response = client.newCall(request).execute()
+                try {
+                    val inputStream: InputStream = response.body().byteStream()
+                    Log.i("INPUT-STREAM", "Input stream value = $inputStream")
+                    val bufferedInputStream = BufferedInputStream(inputStream)
+                    val bit = BitmapFactory.decodeStream(bufferedInputStream)
+                    Log.i("BITMAP", "bitmap value = $bit")
+//                    setBitmap(bit)
+                } catch (e: java.lang.Exception) {
+                    Log.d("FAILURE CONVERT", e.message)
+                }
+            } catch (e: Exception) {
+                Log.d("ERROR-DOWNLOAD-IMAGE", e.message)
+            }
+        }
+    }
+
+    private fun setBitmap(bit: Bitmap) {
+        ivFotoJastiper.setImageBitmap(bit)
     }
 }
