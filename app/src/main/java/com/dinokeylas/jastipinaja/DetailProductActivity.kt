@@ -4,11 +4,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.dinokeylas.jastipinaja.model.Post
 import com.dinokeylas.jastipinaja.model.User
@@ -19,7 +19,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import kotlinx.android.synthetic.main.activity_detail_product.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 import java.io.BufferedInputStream
 import java.io.InputStream
 
@@ -50,7 +49,7 @@ class DetailProductActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-        var date = String()
+        val date: String
         if (post.postType == 1) {
             date = DateUtils.getStringFormatedDate(post.product.shoppingDate)
             tvHargaJastipBarang.visibility = View.VISIBLE
@@ -83,12 +82,28 @@ class DetailProductActivity : AppCompatActivity() {
 //
 //        }
         btnBeli.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    ProductBuyActivity::class.java
-                ).putExtra(ProductBuyActivity.POST_ID, post.postId)
-            )
+            ConfirmationDialog.Builder(this)
+                .setTitle("Pilihan Transaksi")
+                .setDescription("Silahkan pilih bagaimana anda mengantarkan barang ini?")
+                .setOkText("Pengiriman")
+                .setCancelText("COD")
+                .setListener(object : ConfirmationDialog.ConfirmationDialogListener{
+                    override fun setOnOkListener() {
+                        startActivity(
+                            Intent(
+                                applicationContext,
+                                ProductBuyActivity::class.java
+                            ).putExtra(ProductBuyActivity.POST_ID, post.postId)
+                        )
+                    }
+
+                    override fun setOnCancelListener() {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=${person.phoneNumber}&text=&source=&data=&app_absent=")))
+                    }
+
+                })
+                .build()
+                .show()
         }
     }
 

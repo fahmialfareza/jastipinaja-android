@@ -1,6 +1,7 @@
 package com.dinokeylas.jastipinaja
 
 import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,8 +12,11 @@ import android.widget.Spinner
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.dinokeylas.jastipinaja.model.Post
+import com.dinokeylas.jastipinaja.model.Transaction
 import com.dinokeylas.jastipinaja.utils.Constant
+import com.dinokeylas.jastipinaja.utils.Constant.Collections.Companion.TRANSACTION
 import com.dinokeylas.jastipinaja.utils.DateUtils
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail_product.*
 import kotlinx.android.synthetic.main.activity_detail_product.tvDateBarang
@@ -24,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_posting.minusLyt
 import kotlinx.android.synthetic.main.activity_posting.plusLyt
 import kotlinx.android.synthetic.main.activity_posting.tvQty
 import kotlinx.android.synthetic.main.activity_product_buy.*
+import java.util.*
 
 class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     companion object {
@@ -31,10 +36,12 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     }
 
     private var postId = ""
+    private var userId = ""
     private var post = Post()
     private var qty: Int = 0
     private var expedition = String()
     private var deliveryFee = 0
+    private var totalPay = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_buy)
@@ -49,13 +56,14 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     }
 
     private fun initObject() {
+        userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         postId = intent.getStringExtra(POST_ID)
         initPostData()
     }
 
     private fun initUI() {
         var date = String()
-        val totalPay = deliveryFee + post.product.price + post.product.serviceFee
+        totalPay = deliveryFee + post.product.price + post.product.serviceFee
         if (post.postType == 1) {
             date = DateUtils.getStringFormatedDate(post.product.shoppingDate)
         } else {
@@ -66,9 +74,9 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         tvDateBarang.text = date
         tvDeskripsiBarang.text = post.product.description
         tvTempatBeliBarang.text = post.product.locationFull
-        etHargaBarang_.text = "Rp " + post.product.price.toString()
-        etJasaJastip_.text = "Rp " + post.product.serviceFee.toString()
-        etBiayaTotal.text = "Rp " + totalPay
+        etHargaBarang_.text = post.product.price.toString()
+        etJasaJastip_.text = post.product.serviceFee.toString()
+        etBiayaTotal.text = totalPay.toString()
         Glide.with(this).load(post.product.imageUrl).into(ivBarang_)
 
         val spinnerEkspedisi = findViewById<Spinner>(R.id.spinnerEkspedisi)
@@ -100,6 +108,10 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
         btn_to_payment?.setOnClickListener {
+            if (etAlamatKirim?.text.toString().isEmpty()){
+                etAlamatKirim?.error = "Harus diisi"
+                return@setOnClickListener
+            }
             showInformationDialog()
         }
     }
@@ -108,7 +120,7 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     private fun initPostData() {
         FirebaseFirestore.getInstance().collection(Constant.Collections.POST).document(postId).get()
             .addOnSuccessListener {
-                if(it!=null){
+                if (it != null) {
                     post = it.toObject(Post::class.java)!!
                     post.postId = it.id
                     initUI()
@@ -128,15 +140,15 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         expedition = adapterView?.getItemAtPosition(position).toString()
         when (expedition) {
             "Go-Send" -> {
-                etBiayaKirim_.text = "Rp 12000"
+                etBiayaKirim_.text = "12000"
                 deliveryFee = 12000
             }
             "JNE" -> {
-                etBiayaKirim_.text = "Rp 24000"
+                etBiayaKirim_.text = "24000"
                 deliveryFee = 24000
             }
             else -> {
-                etBiayaKirim_.text = "Rp 15000"
+                etBiayaKirim_.text = "15000"
                 deliveryFee = 15000
             }
         }
@@ -146,9 +158,62 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Perhation")
         builder.setMessage("Pastikan data yang Anda isikan telah benar")
-        builder.setPositiveButton("Oke") { _, _ -> }
+        builder.setPositiveButton("Oke") { _, _ ->
+            saveDataToFirebase(createTransaction())
+        }
         builder.setNegativeButton("Batal") { _, _ -> }
         val dialog: AlertDialog = builder.create()
         dialog.show()
+    }
+
+    private fun createTransaction(): Transaction {
+        val jastiper: String
+        val purchaser: String
+        if (post.postType == 1) {
+            jastiper = post.author
+            purchaser = userId
+        } else {
+            jastiper = userId
+            purchaser = post.author
+        }
+
+        return Transaction(
+            "",
+            post.postType,
+            1,
+            post,
+            qty,
+            jastiper,
+            purchaser,
+            etHargaBarang_.text.toString().toInt(),
+            etJasaJastip_.text.toString().toInt(),
+            deliveryFee,
+            etBiayaTotal.text.toString().toInt(),
+            "",
+            expedition,
+            etAlamatKirim.text.toString(),
+            false,
+            Constant.TransactionStatus.ON_PROGRESS,
+            Constant.TransactionProgress.ORDER,
+            etKeteranganBarang_.text.toString(),
+            Calendar.getInstance().time,
+            Calendar.getInstance().time,
+            Calendar.getInstance().time
+        )
+    }
+
+    private fun saveDataToFirebase(transaction: Transaction) {
+        pb_product_buy.visibility = View.VISIBLE
+        FirebaseFirestore.getInstance().collection(TRANSACTION).add(transaction)
+            .addOnSuccessListener {
+                pb_product_buy.visibility = View.GONE
+                startActivity(
+                    Intent(this, PaymentActivity::class.java)
+                        .putExtra(PaymentActivity.ARG_TOTAL_TAGIHAN, totalPay)
+                        .putExtra(PaymentActivity.ARG_ALAMAT_KIRIM, etAlamatKirim.text.toString())
+                )
+            }.addOnFailureListener {
+                pb_product_buy.visibility = View.GONE
+            }
     }
 }
