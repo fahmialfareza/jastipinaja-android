@@ -1,6 +1,7 @@
 package com.dinokeylas.jastipinaja
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -71,12 +72,28 @@ class DetailProductActivity : AppCompatActivity() {
 //
 //        }
         btnBeli.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    ProductBuyActivity::class.java
-                ).putExtra(ProductBuyActivity.POST_ID, post.postId)
-            )
+            ConfirmationDialog.Builder(this)
+                .setTitle("Pilihan Transaksi")
+                .setDescription("Silahkan pilih bagaimana anda mengantarkan barang ini?")
+                .setOkText("Pengiriman")
+                .setCancelText("COD")
+                .setListener(object : ConfirmationDialog.ConfirmationDialogListener{
+                    override fun setOnOkListener() {
+                        startActivity(
+                            Intent(
+                                applicationContext,
+                                ProductBuyActivity::class.java
+                            ).putExtra(ProductBuyActivity.POST_ID, post.postId)
+                        )
+                    }
+
+                    override fun setOnCancelListener() {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=${person.phoneNumber}&text=&source=&data=&app_absent=")))
+                    }
+
+                })
+                .build()
+                .show()
         }
     }
 

@@ -98,6 +98,8 @@
     <string name="label_alamat_kirim">Alamat Kirim</string>
     <string name="next_to_pay">Lanjutkan Ke Pembayaran</string>
     <string name="label_metode_pembayaran">Metode Pembayaran</string>
+    <string name="label_cod">COD</string>
+    <string name="label_pengiriman">Pengiriman</string>
 
     <string-array name="category">
         <item>Fashion dan Aksesoris</item>

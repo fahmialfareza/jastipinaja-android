@@ -1,6 +1,7 @@
 package com.dinokeylas.jastipinaja
 
 import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -35,6 +36,7 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     private var qty: Int = 0
     private var expedition = String()
     private var deliveryFee = 0
+    private var totalPay = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_buy)
@@ -55,7 +57,7 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
     private fun initUI() {
         var date = String()
-        val totalPay = deliveryFee + post.product.price + post.product.serviceFee
+        totalPay = deliveryFee + post.product.price + post.product.serviceFee
         if (post.postType == 1) {
             date = DateUtils.getStringFormatedDate(post.product.shoppingDate)
         } else {
@@ -100,6 +102,10 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
         btn_to_payment?.setOnClickListener {
+            if (etAlamatKirim?.text.toString().isEmpty()){
+                etAlamatKirim?.error = "Harus diisi"
+                return@setOnClickListener
+            }
             showInformationDialog()
         }
     }
@@ -108,7 +114,7 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     private fun initPostData() {
         FirebaseFirestore.getInstance().collection(Constant.Collections.POST).document(postId).get()
             .addOnSuccessListener {
-                if(it!=null){
+                if (it != null) {
                     post = it.toObject(Post::class.java)!!
                     post.postId = it.id
                     initUI()
@@ -146,7 +152,13 @@ class ProductBuyActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Perhation")
         builder.setMessage("Pastikan data yang Anda isikan telah benar")
-        builder.setPositiveButton("Oke") { _, _ -> }
+        builder.setPositiveButton("Oke") { _, _ ->
+            startActivity(
+                Intent(this, PaymentActivity::class.java)
+                    .putExtra(PaymentActivity.ARG_TOTAL_TAGIHAN, totalPay)
+                    .putExtra(PaymentActivity.ARG_ALAMAT_KIRIM, etAlamatKirim.text.toString())
+            )
+        }
         builder.setNegativeButton("Batal") { _, _ -> }
         val dialog: AlertDialog = builder.create()
         dialog.show()
